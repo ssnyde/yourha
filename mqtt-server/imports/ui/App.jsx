@@ -1,19 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+
+import { Msgs } from '../api/msgs.js';
 
 import Msg from './Msg.jsx';
 
 // App component - represents the whole app
-export default class App extends Component {
-  getMsgs() {
-    return [
-      { _id: 1, text: 'This is messsage 1' },
-      { _id: 2, text: 'This is message 2' },
-      { _id: 3, text: 'This is message 3' },
-    ];
-  }
-  
+class App extends Component {
   renderMsgs() {
-    return this.getMsgs().map((msg) => (
+    return this.props.msgs.map((msg) => (
       <Msg key={msg._id} msg={msg} />
     ));
   }
@@ -32,3 +27,14 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  msgs: PropTypes.array.isRequired,
+};
+
+export default createContainer(() => {
+  return {
+    msgs: Msgs.find({}).fetch(),
+  };
+}, App);
+  

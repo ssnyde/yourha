@@ -4,6 +4,8 @@ Meteor.startup(() => {
   // code to run on server at startup
 });
 
+import '../imports/api/msgs.js';
+
 var mosca = require('mosca');
 
 var ascoltatore = {
@@ -27,7 +29,13 @@ server.on('clientConnected', function(client) {
 
 // fired when a message is received
 server.on('published', function(packet, client) {
-    console.log('Published', packet.payload);
+  console.log('Whole packet', packet);
+  
+  if (packet.topic === 'msg')
+  {
+    //Msgs.insert({text: packet.payload.toString()});
+  }
+  
 });
 
 server.on('ready', setup);
